@@ -4,10 +4,15 @@ const colors = document.getElementsByClassName("jsColor");
 const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");
 
-canvas.width = document.getElementsByClassName("canvas")[0].offsetWidth;
-canvas.height = document.getElementsByClassName("canvas")[0].offsetHeight;
+const INITIAL_COLOR = "#2c2c2c";
+const CANVAS_WIDTH = document.getElementsByClassName("canvas")[0].offsetWidth;
+const CANVAS_HEIGHT = document.getElementsByClassName("canvas")[0].offsetHeight;
 
-ctx.strokeStyle = "#2c2c2c";
+canvas.width = CANVAS_WIDTH
+canvas.height = CANVAS_HEIGHT
+
+ctx.strokeStyle = INITIAL_COLOR;
+ctx.fillStyle = INITIAL_COLOR;
 ctx.lineWidth = 2.5;
 
 let painting = false; 
@@ -37,6 +42,7 @@ function onMouseMove(event){
 function handleColorClick(event){
     const color = event.target.style.backgroundColor;
     ctx.strokeStyle = color;
+    ctx.fillStyle = color;
 }
 
 function handleRangeChange(event){
@@ -54,6 +60,12 @@ function handleModeClick(){
  }
 }
 
+function handleCanvasClick(){
+    if(filling){
+        ctx.fillRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
+    }
+}
+
 if(canvas){
     // 캔버스 안에 한정하여 발생하는 이벤트
     canvas.addEventListener("mousemove",onMouseMove);
@@ -64,6 +76,7 @@ if(canvas){
     // mouseup : mouse에서 클릭을 뗐을 때의 상태
     canvas.addEventListener("mouseleave",stopPainting);
     // mouseleave : mouse가 캔버스를 벗어났을 때
+    canvas.addEventListener("click",handleCanvasClick);
 }
 
 Array.from(colors).forEach(color => 
